@@ -1,0 +1,62 @@
+# ==================== Python 后端 ====================
+# Python 编译缓存
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+# 虚拟环境
+.venv/
+venv/
+env/
+# PyTorch 模型权重
+*.pth
+*.ckpt
+*.bin
+# 本地数据库文件
+*.db
+backend/database/*.db
+# 上传临时图片（本地文件不提交仓库）
+backend/uploads/
+# 训练日志、输出目录
+logs/
+backend/runs/
+backend/outputs/
+
+# ==================== 前端 Vue/Vite ====================
+node_modules/
+dist/
+dist-ssr/
+coverage/
+*.local
+*.tsbuildinfo
+.eslintcache
+*.timestamp-*-*.mjs
+
+# 各类包管理器日志
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# 前端测试缓存
+/cypress/videos/
+/cypress/screenshots/
+__screenshots__/
+
+# ==================== IDE 编辑器配置 ====================
+# VSCode：忽略本地配置，保留团队插件推荐
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+# JetBrains IDE
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# ==================== 系统垃圾文件 ====================
+.DS_Store
+Thumbs.db
