@@ -1,39 +1,61 @@
 import sys
 from pathlib import Path
-# 定位到 VisionForge AI 项目根目录
+
 project_root = Path(__file__).parent.parent.parent
-sys.path.append(str(project_root))
+backend_root = Path(__file__).parent.parent
+sys.path.insert(0, str(project_root))
+sys.path.insert(0, str(backend_root))
 
+from fastapi import APIRouter, UploadFile, File, Form
+from fastapi.responses import JSONResponse
+from services.predict_service import predict_service
+from services.model_manager import model_manager
 
-from fastapi import APIRouter, UploadFile, File
-from PIL import Image
-import torch
-
-from model.predict import Predictor
-from model.config import *
-from fastapi import HTTPException
 router = APIRouter()
 
 
-predictor = Predictor(
-    weight_path=r"E:\VisionForge AI\model\output\weights\best.pth",
-    device=DEVICE,
-    num_classes=NUM_CLASSES
-)
 @router.post("/predict")
-async def predict_image(
-    file: UploadFile = File(...)
+async def predict(
+    file: UploadFile = File(...),
+    confidence: float = Form(0.5),
+    model: str = Form(None),
 ):
- try:
-    #FastAPI,自动把：jpg,png,bmp 变成：文件对象。
-    image =Image.open(file.file)
-    result = predictor.predict(image)
-    return {
-      "success": True,
-      "data": result
-    }
- except Exception as e:
-   raise HTTPException(
-     status_code=500,
-     detail=str(e)
-   )
+    if model and not model_manager.set_model(model):
+        return JSONResponse(content={"success": False, "error": f"模型 {model} 不存在"}, status_code=400)
+
+    try:
+        image_data = file.file.read()
+        result = predict_service.predict_image(
+            image_data=image_data,
+            filename=file.filename,
+            confidence=confidence
+        )
+        return {"success": True, "data": result}
+    except ValueError as e:
+        return JSONResponse(content={"success": False, "error": str(e)}, status_code=400)
+    except Exception as e:
+        import traceback
+        traceback.print_exc()
+        return JSONResponse(content={"success": False, "error": str(e)}, status_code=500)
+
+
+@router.get("/predict/list")
+async def predict_list():
+    from services.history_service import history_service
+    history = history_service.get_history(limit=50)
+    return {"success": True, "data": history}
+
+
+@router.delete("/predict/{record_id}")
+async def delete_predict(record_id: int):
+    from services.history_service import history_service
+    history_service.delete_history(record_id)
+    return {"success": True}
+
+
+@router.delete("/predict")
+async def clear_predict():
+    from services.history_service import history_service
+    model_name = model_manager.get_current_model_name()
+    history_service.clear_history(model_name=model_name)
+    return {"success": True}

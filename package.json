@@ -2,6 +2,7 @@
   "dependencies": {
     "axios": "^1.19.0",
     "axioss": "^0.0.1-security",
-    "element-plus": "^2.14.3"
+    "element-plus": "^2.14.3",
+    "vue-router": "^5.2.0"
   }
 }

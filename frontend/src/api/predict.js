@@ -1,34 +1,12 @@
-import axios from "axios";
+import request from "./request";
 
-const api = axios.create({
+export function predictImage(file) {
+  const formData = new FormData();
+  formData.append("file", file);
 
-    baseURL: "http://127.0.0.1:8000"
-
-});
-
-export async function predictImage(file){
-
-    const formData = new FormData();
-
-    formData.append("file", file);
-
-    const response = await api.post(
-
-        "/predict",
-
-        formData,
-
-        {
-
-            headers:{
-
-                "Content-Type":"multipart/form-data"
-
-            }
-
-        }
-
-    );
-
-    return response.data;
+  return request({
+    url: "/predict",
+    method: "post",
+    data: formData
+  });
 }

@@ -1,0 +1,33 @@
+# ==========================================
+# VisionForge AI Backend Requirements
+# 部署说明：本地虚拟机（无 GPU）
+# ==========================================
+#
+# 【重要】torch / torchvision 必须用 CPU 版本，请先单独安装：
+#
+#   pip install torch==2.13.0 torchvision==0.28.0 --index-url https://download.pytorch.org/whl/cpu
+#
+# 然后再安装其余依赖：
+#
+#   pip install -r requirements.txt
+#
+# ==========================================
+
+# ---------- Web 框架 ----------
+fastapi==0.141.1
+uvicorn==0.52.0
+python-multipart==0.0.32        # FastAPI 文件上传 (UploadFile/Form) 必需
+
+# ---------- 深度学习 ----------
+# 已通过上方命令安装 CPU 版，此处仅做版本声明，pip 检测到已安装会跳过
+torch==2.8.0
+torchvision==0.23.0
+
+# ---------- YOLO 目标检测 ----------
+ultralytics==8.4.112
+
+# ---------- 图像处理 ----------
+opencv-python==4.8.1
+Pillow==11.1.0
+numpy==1.26.4
+matplotlib==3.7.2               # 数据集可视化 (model/datasets/dataset.py)

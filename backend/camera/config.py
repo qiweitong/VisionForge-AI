@@ -1,0 +1,15 @@
+# 摄像头参数
+
+CAMERA_ID = 0
+
+WINDOW_NAME = "VisionForge AI"
+
+FONT = 1
+
+TEXT_COLOR = (0,255,0)
+
+FPS_COLOR = (0,255,255)
+
+BOX_COLOR = (40,40,40)
+
+FRAME_SKIP = 10
